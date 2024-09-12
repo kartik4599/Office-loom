@@ -1,19 +1,24 @@
 "use client";
 
 import { useGetWorkspaces } from "@/features/workspace/api/use-get-workspaces";
+import { useCreateWorkspaceModal } from "@/features/workspace/store/use-create-workspace-modal";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 
 export default function Home() {
-  const { data, isLoading } = useGetWorkspaces();
-
+  const { data } = useGetWorkspaces();
+  const router = useRouter();
+  const [open, setOpen] = useCreateWorkspaceModal();
   const workSpaceId = useMemo(() => data?.[0]?._id, [data]);
 
   useEffect(() => {
-    if (workSpaceId) {
-      return console.log("Redirect to workspace");
-    }
-    return console.log("Open creation modal");
-  }, [isLoading, data]);
+    if (data === undefined) return;
 
-  return <></>;
+    if (workSpaceId) {
+      setOpen(false);
+      router.replace("/workspace/" + workSpaceId);
+    } else if (!open) setOpen(true);
+  }, [workSpaceId, open, data]);
+
+  return data === undefined ? "Loading..." : <></>;
 }
