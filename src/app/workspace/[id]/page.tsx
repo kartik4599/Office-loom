@@ -1,9 +1,12 @@
-interface pageProps {
-  params: { id: string };
-}
+"use client";
 
-const page = ({ params: { id } }: pageProps) => {
-  return <div>page:{id}</div>;
+import useGetWorkspace from "@/features/workspace/api/use-get-workspaces";
+import { Loader } from "lucide-react";
+
+const page = () => {
+  const { data, isLoading } = useGetWorkspace();
+
+  return <div>{isLoading ? <Loader /> : data?.name}</div>;
 };
 
 export default page;
