@@ -18,7 +18,7 @@ export const create = mutation({
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
 
-    if (!userId) throw new Error("Unauthorized");
+    if (!userId) return null;
 
     const joinCode = generateCode();
 
