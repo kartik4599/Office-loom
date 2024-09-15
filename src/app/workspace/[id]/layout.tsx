@@ -6,7 +6,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import WorkspaceSidebar from "@/components/work-space-sidebar";
+import WorkspaceSidebar from "@/features/workspace/components/work-space-sidebar";
 import React from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {

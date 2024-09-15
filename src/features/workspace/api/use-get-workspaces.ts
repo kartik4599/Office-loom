@@ -19,5 +19,3 @@ export const useGetWorkspace = () => {
 
   return { data, isLoading, workspaceId };
 };
-
-export default useGetWorkspace;

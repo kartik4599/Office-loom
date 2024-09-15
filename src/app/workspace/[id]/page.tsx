@@ -1,6 +1,6 @@
 "use client";
 
-import useGetWorkspace from "@/features/workspace/api/use-get-workspaces";
+import { useGetWorkspace } from "@/features/workspace/api/use-get-workspaces";
 import { Loader } from "lucide-react";
 
 const page = () => {

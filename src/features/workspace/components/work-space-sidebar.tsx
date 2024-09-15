@@ -1,5 +1,5 @@
 import { useUserCurrentMember } from "@/features/members/api/user-current-member";
-import useGetWorkspace from "@/features/workspace/api/use-get-workspaces";
+import { useGetWorkspace } from "@/features/workspace/api/use-get-workspaces";
 import { AlertTriangle, Loader } from "lucide-react";
 import WorkspaceHeader from "./work-space-header";
 

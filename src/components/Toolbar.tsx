@@ -1,4 +1,4 @@
-import useGetWorkspace from "@/features/workspace/api/use-get-workspaces";
+import { useGetWorkspace } from "@/features/workspace/api/use-get-workspaces";
 import { Info, Search } from "lucide-react";
 import { Button } from "./ui/button";
 

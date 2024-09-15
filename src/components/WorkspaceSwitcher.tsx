@@ -1,5 +1,6 @@
-import useGetWorkspace, {
+import {
   useGetWorkspaces,
+  useGetWorkspace,
 } from "@/features/workspace/api/use-get-workspaces";
 import { useCreateWorkspaceModal } from "@/features/workspace/store/use-create-workspace-modal";
 import { Loader, Plus } from "lucide-react";
