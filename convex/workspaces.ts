@@ -132,3 +132,25 @@ export const remove = mutation({
     return args.id;
   },
 });
+
+export const newJoinCode = mutation({
+  args: { id: v.id("workspaces") },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+
+    if (!userId) throw new Error("Unauthorized");
+
+    const member = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_and_user_id", (q) =>
+        q.eq("userId", userId).eq("workspaceId", args.id)
+      )
+      .unique();
+
+    if (!member || member.role !== "admin") return null;
+    const joinCode = generateCode();
+
+    await ctx.db.patch(args.id, { joinCode });
+    return args.id;
+  },
+});
