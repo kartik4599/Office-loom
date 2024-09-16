@@ -82,6 +82,25 @@ export const getById = query({
   },
 });
 
+export const getInfoById = query({
+  args: { id: v.id("workspaces") },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+
+    if (!userId) throw new Error("Unauthorized");
+
+    const member = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_and_user_id", (q) =>
+        q.eq("userId", userId).eq("workspaceId", args.id)
+      )
+      .unique();
+
+    const workspace = await ctx.db.get(args.id);
+    return { name: workspace?.name, isMember: !!member };
+  },
+});
+
 export const update = mutation({
   args: { id: v.id("workspaces"), name: v.string() },
   handler: async (ctx, args) => {
@@ -152,5 +171,37 @@ export const newJoinCode = mutation({
 
     await ctx.db.patch(args.id, { joinCode });
     return args.id;
+  },
+});
+
+export const join = mutation({
+  args: { workspacesId: v.id("workspaces"), joinCode: v.string() },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+
+    if (!userId) throw new Error("Unauthorized");
+
+    const workspace = await ctx.db.get(args.workspacesId);
+    if (!workspace) throw new Error("Workspace not found");
+
+    if (workspace.joinCode !== args.joinCode.toLowerCase())
+      throw new Error("Invalid join code");
+
+    const existingMember = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_and_user_id", (q) =>
+        q.eq("userId", userId).eq("workspaceId", args.workspacesId)
+      )
+      .unique();
+
+    if (existingMember) throw new Error("Already a member");
+
+    await ctx.db.insert("members", {
+      role: "member",
+      userId,
+      workspaceId: args.workspacesId,
+    });
+
+    return args.workspacesId;
   },
 });

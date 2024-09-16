@@ -29,7 +29,7 @@ export const get = query({
     const members: { member: Doc<"members">; user: Doc<"users"> }[] = [];
     await Promise.all(
       data.map(async (member) => {
-        const user = await populateUser(ctx, userId);
+        const user = await populateUser(ctx, member.userId);
         if (user) members.push({ member, user });
       })
     );

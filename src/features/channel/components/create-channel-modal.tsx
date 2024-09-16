@@ -8,9 +8,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useGetWorkspace } from "@/features/workspace/api/use-get-workspaces";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
+import { Id } from "../../../../convex/_generated/dataModel";
 import { useCreateChannel } from "../api/use-create-channel";
 import { useCreateChannelModal } from "../store/use-create-channel-modal";
 
@@ -18,7 +19,7 @@ const CreateChannelModal = () => {
   const [name, setName] = useState("");
   const [open, setOpen] = useCreateChannelModal();
   const { mutate, isPending } = useCreateChannel();
-  const { workspaceId } = useGetWorkspace();
+  const { id } = useParams();
 
   const afterSubmit = () => {
     setOpen(false);
@@ -28,7 +29,7 @@ const CreateChannelModal = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     mutate(
-      { name, workspaceId },
+      { name, workspaceId: id as Id<"workspaces"> },
       {
         onSuccess: (id) => {
           afterSubmit();
