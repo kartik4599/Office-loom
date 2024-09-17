@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { Id } from "../../../../convex/_generated/dataModel";
@@ -20,6 +20,7 @@ const CreateChannelModal = () => {
   const [open, setOpen] = useCreateChannelModal();
   const { mutate, isPending } = useCreateChannel();
   const { id } = useParams();
+  const router = useRouter();
 
   const afterSubmit = () => {
     setOpen(false);
@@ -31,10 +32,13 @@ const CreateChannelModal = () => {
     mutate(
       { name, workspaceId: id as Id<"workspaces"> },
       {
-        onSuccess: (id) => {
+        onSuccess: (channelId) => {
           afterSubmit();
           toast.success("Channel created succesfully");
-          // router.push("/workspace/" + id);
+          router.push(`/workspace/${id}/channel/${channelId}`);
+        },
+        onError: () => {
+          toast.error("Failed to create channel");
         },
       }
     );

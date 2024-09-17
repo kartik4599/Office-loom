@@ -1,4 +1,7 @@
-import { useGetChannels } from "@/features/channel/api/use-get-channels";
+import {
+  useGetChannel,
+  useGetChannels,
+} from "@/features/channel/api/use-get-channels";
 import CreateChannelModal from "@/features/channel/components/create-channel-modal";
 import { useCreateChannelModal } from "@/features/channel/store/use-create-channel-modal";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
@@ -27,7 +30,7 @@ const WorkspaceSidebar = () => {
   const { data: channels } = useGetChannels(workspaceId);
   const { data: members } = useGetMembers(workspaceId);
   const [_, setOpen] = useCreateChannelModal();
-
+  const { channelId } = useGetChannel();
   if (workspaceLoading || memberLoading) {
     return (
       <div className="flex flex-col bg-[#5E2C5F] h-full items-center justify-center">
@@ -75,6 +78,7 @@ const WorkspaceSidebar = () => {
             id={item._id}
             icon={Hash}
             workspaceId={workspaceId}
+            variant={channelId === item._id ? "active" : "default"}
           />
         ))}
       </WorkspaceSection>
