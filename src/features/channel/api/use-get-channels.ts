@@ -10,12 +10,18 @@ export const useGetChannels = (workspaceId: Id<"workspaces">) => {
 };
 
 export const useGetChannel = () => {
+  const channelId = useGetChannelId();
+
+  let data = null;
+  if (channelId) data = useQuery(api.channels.getById, { id: channelId });
+  const isLoading = data === undefined;
+
+  return { channelId, data, isLoading };
+};
+
+export const useGetChannelId = () => {
   const params = useParams();
   const channelId = params.channelId as Id<"channels">;
-  
-  // let data = null;
-  // if (workspaceId) data = useQuery(api.channels., { id: workspaceId });
-  // const isLoading = data === undefined;
 
-  return { channelId };
+  return channelId;
 };

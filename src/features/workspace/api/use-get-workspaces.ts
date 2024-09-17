@@ -11,8 +11,7 @@ export const useGetWorkspaces = () => {
 };
 
 export const useGetWorkspace = () => {
-  const params = useParams();
-  const workspaceId = params.id as Id<"workspaces">;
+  const workspaceId = getworkspaceId();
 
   let data = null;
   if (workspaceId) data = useQuery(api.workspaces.getById, { id: workspaceId });
@@ -22,13 +21,18 @@ export const useGetWorkspace = () => {
 };
 
 export const useGetWorkspaceInfo = () => {
-  const params = useParams();
-  const workspaceId = params.id as Id<"workspaces">;
-  
+  const workspaceId = getworkspaceId();
+
   let data = null;
   if (workspaceId)
     data = useQuery(api.workspaces.getInfoById, { id: workspaceId });
   const isLoading = data === undefined;
 
   return { data, isLoading, workspaceId };
+};
+
+export const getworkspaceId = () => {
+  const params = useParams();
+  const workspaceId = params.id as Id<"workspaces">;
+  return workspaceId;
 };

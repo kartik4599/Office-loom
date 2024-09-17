@@ -1,8 +1,7 @@
 import {
-  useGetChannel,
+  useGetChannelId,
   useGetChannels,
 } from "@/features/channel/api/use-get-channels";
-import CreateChannelModal from "@/features/channel/components/create-channel-modal";
 import { useCreateChannelModal } from "@/features/channel/store/use-create-channel-modal";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
 import { useGetMembers } from "@/features/members/api/use-get-members";
@@ -30,7 +29,7 @@ const WorkspaceSidebar = () => {
   const { data: channels } = useGetChannels(workspaceId);
   const { data: members } = useGetMembers(workspaceId);
   const [_, setOpen] = useCreateChannelModal();
-  const { channelId } = useGetChannel();
+  const channelId = useGetChannelId();
   if (workspaceLoading || memberLoading) {
     return (
       <div className="flex flex-col bg-[#5E2C5F] h-full items-center justify-center">
