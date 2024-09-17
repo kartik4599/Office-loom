@@ -1,5 +1,6 @@
 "use client";
 
+import ChatInput from "@/components/chat-input";
 import { useGetChannel } from "@/features/channel/api/use-get-channels";
 import Header from "@/features/channel/components/Header";
 import { Loader, TriangleAlert } from "lucide-react";
@@ -29,7 +30,8 @@ const page = () => {
   return (
     <div className="flex flex-col h-full">
       <Header channel={data} />
-      {data?.name}
+      <div className="flex-1" />
+      <ChatInput placeholder={`Message #${data.name}`} />
     </div>
   );
 };
