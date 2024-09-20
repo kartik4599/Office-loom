@@ -19,7 +19,7 @@ import EmojiPopover from "./emoji-popover";
 import Image from "next/image";
 
 type EditorValue = {
-  image: File | null;
+  image: File[];
   body: string;
 };
 
@@ -43,7 +43,7 @@ const Editor = ({
   placeholder = "Write something...",
 }: EditorProps) => {
   const [text, settext] = useState("");
-  const [images, setImages] = useState<FileList | null>(null);
+  const [images, setImages] = useState<File[]>([]);
 
   const [isToolbarVisiable, setIsToolbarVisiable] = useToggle(true);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -87,8 +87,18 @@ const Editor = ({
             enter: {
               key: "Enter",
               handler: () => {
-                // submitRef.current();
-                return;
+                const text = quill.getText();
+                const image = imageElementRef.current?.files
+                  ? Array.from(imageElementRef.current?.files)
+                  : [];
+
+                const isEmpty =
+                  text.replace(/<(.|\n)*?>/g, "").trim().length === 0 ||
+                  image.length > 0;
+                if (isEmpty) return;
+
+                const body = JSON.stringify(quill.getContents());
+                submitRef.current({ body, image });
               },
             },
             shift_enter: {
@@ -151,7 +161,6 @@ const Editor = ({
     setImages(
       (pre: any) => [...Array.from(pre).filter((_, i) => i !== index)] as any
     );
-    // setImages(null);
     imageElementRef.current!.value = "";
   };
 
@@ -164,13 +173,15 @@ const Editor = ({
         accept="image/*"
         multiple
         ref={imageElementRef}
-        onChange={(event) => setImages(event.target.files)}
+        onChange={(event) => {
+          if (event.target.files) setImages(Array.from(event.target.files));
+        }}
         className="hidden"
       />
       <div className="flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-300 focus-within:shadow-sm transition bg-white">
         <div ref={containerRef} className="h-full ql-custom" />
-        {images && (
-          <div className="flex space-x-1">
+        {images.length > 0 && (
+          <div className="flex">
             {Array.from(images).map((item, index) => (
               <div className="p-2">
                 <div className="relative size-[62px] flex items-center justify-center group/image">
@@ -215,11 +226,19 @@ const Editor = ({
               <Button
                 variant={"outline"}
                 size={"sm"}
-                onClick={() => {}}
+                onClick={onCancel}
                 disabled={disabled}>
                 Cancel
               </Button>
-              <Button size={"sm"} onClick={() => {}} disabled={disabled}>
+              <Button
+                size={"sm"}
+                onClick={() =>
+                  onSubmit({
+                    image: images,
+                    body: JSON.stringify(quillRef.current?.getContents()),
+                  })
+                }
+                disabled={disabled}>
                 Save
               </Button>
             </div>
@@ -236,10 +255,15 @@ const Editor = ({
                 </Button>
               </Hint>
               <Button
-                disabled={disabledRef.current || isEmpty}
+                disabled={disabled || isEmpty}
                 size="iconSmall"
                 variant={"ghost"}
-                onClick={() => {}}
+                onClick={() =>
+                  onSubmit({
+                    image: images,
+                    body: JSON.stringify(quillRef.current?.getContents()),
+                  })
+                }
                 className={cn(
                   "ml-auto",
                   isEmpty
