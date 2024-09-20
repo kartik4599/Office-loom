@@ -15,6 +15,7 @@ import { ImageIcon, SmileIcon } from "lucide-react";
 import Hint from "./ui/hint";
 import { cn } from "@/lib/utils";
 import { useToggle } from "react-use";
+import EmojiPopover from "./emoji-popover";
 
 type EditorValue = {
   image: File | null;
@@ -135,6 +136,13 @@ const Editor = ({
     if (toolbarElement) toolbarElement.classList.toggle("hidden");
   };
 
+  const onEmojiSelect = (emoji: any) => {
+    quillRef.current?.insertText(
+      quillRef.current.getSelection()?.index || 0,
+      emoji.native
+    );
+  };
+
   const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
 
   return (
@@ -152,7 +160,7 @@ const Editor = ({
               <PiTextAa className="size-4" />
             </Button>
           </Hint>
-          <Hint label="Emoji">
+          <EmojiPopover onEmojiSelect={onEmojiSelect}>
             <Button
               disabled={disabled}
               size="iconSmall"
@@ -160,7 +168,7 @@ const Editor = ({
               onClick={() => {}}>
               <SmileIcon className="size-4" />
             </Button>
-          </Hint>
+          </EmojiPopover>
           {variant === "update" && (
             <div className="ml-auto flex items-center gap-x-2">
               <Button
@@ -203,7 +211,11 @@ const Editor = ({
           )}
         </div>
       </div>
-      <div className="p-1 text-[10px] text-muted-foreground flex justify-end">
+      <div
+        className={cn(
+          "p-1 text-[10px] text-muted-foreground flex justify-end opacity-0",
+          !isEmpty && "opacity-100"
+        )}>
         <p>
           <strong>Shift + Return</strong> tot add a new line
         </p>
