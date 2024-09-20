@@ -11,11 +11,12 @@ import {
 import { Button } from "./ui/button";
 import { PiTextAa } from "react-icons/pi";
 import { MdSend } from "react-icons/md";
-import { ImageIcon, SmileIcon } from "lucide-react";
+import { ImageIcon, SmileIcon, XIcon } from "lucide-react";
 import Hint from "./ui/hint";
 import { cn } from "@/lib/utils";
 import { useToggle } from "react-use";
 import EmojiPopover from "./emoji-popover";
+import Image from "next/image";
 
 type EditorValue = {
   image: File | null;
@@ -42,6 +43,8 @@ const Editor = ({
   placeholder = "Write something...",
 }: EditorProps) => {
   const [text, settext] = useState("");
+  const [images, setImages] = useState<FileList | null>(null);
+
   const [isToolbarVisiable, setIsToolbarVisiable] = useToggle(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const submitRef = useRef(onSubmit);
@@ -51,6 +54,7 @@ const Editor = ({
   const onCancelRef = useRef(onCancel);
   const placeholderRef = useRef(placeholder);
   const quillRef = useRef<Quill | null>(null);
+  const imageElementRef = useRef<HTMLInputElement>(null);
 
   useLayoutEffect(() => {
     submitRef.current = onSubmit;
@@ -143,12 +147,49 @@ const Editor = ({
     );
   };
 
+  const onImageCancle = (index: number) => {
+    setImages(
+      (pre: any) => [...Array.from(pre).filter((_, i) => i !== index)] as any
+    );
+    // setImages(null);
+    imageElementRef.current!.value = "";
+  };
+
   const isEmpty = text.replace(/<(.|\n)*?>/g, "").trim().length === 0;
 
   return (
     <div className="flex flex-col">
+      <input
+        type={"file"}
+        accept="image/*"
+        multiple
+        ref={imageElementRef}
+        onChange={(event) => setImages(event.target.files)}
+        className="hidden"
+      />
       <div className="flex flex-col border border-slate-200 rounded-md overflow-hidden focus-within:border-slate-300 focus-within:shadow-sm transition bg-white">
         <div ref={containerRef} className="h-full ql-custom" />
+        {images && (
+          <div className="flex space-x-1">
+            {Array.from(images).map((item, index) => (
+              <div className="p-2">
+                <div className="relative size-[62px] flex items-center justify-center group/image">
+                  <button
+                    onClick={onImageCancle.bind(null, index)}
+                    className="hidden group-hover/image:flex rounded-full bg-black/70 hover:bg-black absolute -top-2.5 -right-2.5 text-white size-6 z-[4] border-2 border-white items-center justify-center">
+                    <XIcon className="size-3.5" />
+                  </button>
+                  <Image
+                    src={URL.createObjectURL(item)}
+                    alt="upload Image"
+                    fill
+                    className="rounded-xl overflow-hidden border object-cover"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="flex px-2 pb-2 z-[5]">
           <Hint
             label={isToolbarVisiable ? "Hide formatting" : "Show formatting"}>
@@ -190,7 +231,7 @@ const Editor = ({
                   disabled={disabled}
                   size="iconSmall"
                   variant={"ghost"}
-                  onClick={() => {}}>
+                  onClick={() => imageElementRef.current?.click()}>
                   <ImageIcon className="size-4" />
                 </Button>
               </Hint>
