@@ -87,7 +87,7 @@ export const get = query({
       ...results,
       page: (
         await Promise.all(
-          results.page.map(async (message: any) => {
+          results.page.map(async (message) => {
             const member = await populateMember(ctx, message.memberId);
             const user = member ? await populateUser(ctx, member.userId) : null;
             if (!member || !user) return null;
@@ -115,7 +115,9 @@ export const get = query({
             };
           })
         )
-      ).filter(Boolean),
+      ).filter(
+        (message): message is NonNullable<typeof message> => message !== null
+      ),
     };
   },
 });
@@ -150,7 +152,6 @@ export const create = mutation({
       channelId: args.channelId,
       workspaceId: args.workspaceId,
       parentMessageId: args.parentMessageId,
-      updatedAt: Date.now(),
       conversationId,
     });
 
