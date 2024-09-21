@@ -1,4 +1,8 @@
+import { useCurrentMember } from "@/features/members/api/use-current-member";
+import { getworkspaceId } from "@/features/workspace/api/use-get-workspaces";
 import { format, isToday, isYesterday, differenceInMinutes } from "date-fns";
+import { useState } from "react";
+import { Id } from "../../../../convex/_generated/dataModel";
 import { GetMessagesReturnType } from "../api/use-get-message";
 import ChannelHero from "./channel-hero";
 import Message from "./message";
@@ -48,7 +52,11 @@ const MessageList = ({
   memberName,
   variant,
 }: MessageListProps) => {
+  const [editingId, setEditingId] = useState<Id<"messages"> | null>(null);
+
   const groupedMessage = gerGroupedMessage(data);
+  const workspaceId = getworkspaceId();
+  const { data: member } = useCurrentMember(workspaceId);
 
   return (
     <div className="flex flex-1 flex-col-reverse pb-4 overflow-y-auto message-scrollbar">
@@ -80,19 +88,16 @@ const MessageList = ({
                 updatedAt={msg.updatedAt}
                 authorImage={msg.user.image}
                 authorName={msg.user.name}
-                isAuthor={false}
-                isEditing={false}
-                setEditingId={() => {}}
+                isAuthor={msg.memberId === member?._id}
+                isEditing={msg._id === editingId}
+                setEditingId={setEditingId}
                 isCompact={isCompact}
                 threadCount={msg.thread.count}
-                hideThreadButton={false}
+                hideThreadButton={variant === "thread"}
                 threadImage={msg.thread.image}
                 threadTimestamp={msg.thread.timestamp}
                 image={msg.image}
                 //   reactions={msg.reactions}s
-                //   isAuthor={msg.memberId === msg.member._id}
-                //   isEditing={msg.isEditing}
-                //   setEditingId={null}
               />
             );
           })}

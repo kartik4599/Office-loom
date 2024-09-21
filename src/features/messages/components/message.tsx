@@ -5,6 +5,7 @@ import { Doc, Id } from "../../../../convex/_generated/dataModel";
 import Hint from "@/components/ui/hint";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Thumbnail from "./thumbnail";
+import Toolbar from "./toolbar";
 const Renderer = dynamic(() => import("./renderer"));
 
 interface MessageProps {
@@ -12,7 +13,7 @@ interface MessageProps {
   memberId: Id<"members">;
   authorImage?: string;
   authorName?: string;
-  isAuthor?: boolean;
+  isAuthor: boolean;
   reactions?: Array<
     Omit<Doc<"reactions">, "memberId"> & {
       memberId: Id<"members">;
@@ -108,6 +109,17 @@ const Message = ({
           </div>
         </div>
       </div>
+      {!isEditing && (
+        <Toolbar
+          isAuthor={isAuthor}
+          isPending={false}
+          handleEdit={() => setEditingId(id)}
+          handleThread={() => {}}
+          handleDelete={() => {}}
+          handleReaction={() => {}}
+          hideThreadButton={hideThreadButton}
+        />
+      )}
     </div>
   );
 };
