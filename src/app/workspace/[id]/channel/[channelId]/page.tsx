@@ -42,7 +42,6 @@ const page = () => {
         isloadingMore={status === "LoadingMore"}
         canLoadMore={status === "CanLoadMore"}
       />
-      {/* <div className="flex-1" /> */}
       <ChatInput placeholder={`Message #${channel.name}`} />
     </div>
   );
