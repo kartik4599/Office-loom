@@ -33,8 +33,6 @@ const ChatInput = ({ placeholder }: ChatInputProps) => {
     image: File[];
   }) => {
     try {
-      console.log("Started");
-
       setloading(true);
       const value: CreateMessageValues = {
         body,

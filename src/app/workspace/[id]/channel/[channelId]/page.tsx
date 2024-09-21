@@ -3,10 +3,11 @@
 import ChatInput from "@/components/chat-input";
 import { useGetChannel } from "@/features/channel/api/use-get-channels";
 import Header from "@/features/channel/components/Header";
+import { useGetMessage } from "@/features/messages/api/use-get-message";
 import { Loader, TriangleAlert } from "lucide-react";
 
 const page = () => {
-  const { data, isLoading } = useGetChannel();
+  const { data, isLoading, channelId } = useGetChannel();
 
   if (isLoading) {
     return (
