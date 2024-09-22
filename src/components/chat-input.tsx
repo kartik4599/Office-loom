@@ -10,7 +10,7 @@ const Editor = dynamic(() => import("@/components/editor"), { ssr: false });
 interface ChatInputProps {
   placeholder: string;
 }
-interface CreateMessageValues {
+export interface CreateMessageValues {
   body: string;
   channelId: Id<"channels">;
   workspaceId: Id<"workspaces">;
@@ -53,7 +53,6 @@ const ChatInput = ({ placeholder }: ChatInputProps) => {
         if (!result.ok) throw new Error("Failed to upload image");
 
         const data = await result.json();
-        console.log({ data, url });
 
         value.image = data.storageId;
       }

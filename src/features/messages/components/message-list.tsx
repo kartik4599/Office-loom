@@ -23,7 +23,7 @@ interface MessageListProps {
   canLoadMore: boolean;
 }
 
-const gerGroupedMessage = (messages: GetMessagesReturnType) => {
+export const getGroupedMessage = (messages: GetMessagesReturnType) => {
   const obj: Record<string, GetMessagesReturnType> = {};
 
   messages.forEach((msg) => {
@@ -57,7 +57,7 @@ const MessageList = ({
 }: MessageListProps) => {
   const [editingId, setEditingId] = useState<Id<"messages"> | null>(null);
 
-  const groupedMessage = gerGroupedMessage(data);
+  const groupedMessage = getGroupedMessage(data);
   const workspaceId = getworkspaceId();
   const { data: member } = useCurrentMember(workspaceId);
 
