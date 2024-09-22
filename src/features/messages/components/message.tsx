@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useToggleReaction } from "@/features/reaction/api/use-toggle-reaction";
 import Reactions from "./reactions";
+import { usePanel } from "@/hooks/use-panel";
 const Renderer = dynamic(() => import("./renderer"));
 const Editor = dynamic(() => import("@/components/editor"));
 
@@ -74,6 +75,8 @@ const Message = ({
 
   const { mutate: reactMessage } = useToggleReaction();
 
+  const { onOpenMessage, onClose, parentMessageId } = usePanel();
+
   const { confirm, ConfirmDialog } = useConfirm(
     "Delete message",
     "Are you sure you want to delete this message? This connot be undone."
@@ -113,6 +116,7 @@ const Message = ({
       { id },
       {
         onSuccess: () => {
+          if (id === parentMessageId) onClose();
           toast.success("Message Deleted");
           setEditingId(null);
         },
@@ -198,8 +202,8 @@ const Message = ({
         <Toolbar
           isAuthor={isAuthor}
           isPending={updateloading || deleteloading}
-          handleEdit={() => setEditingId(id)}
-          handleThread={() => {}}
+          handleEdit={setEditingId.bind(null, id)}
+          handleThread={onOpenMessage.bind(null, id)}
           handleDelete={deleteHandler}
           handleReaction={reactionHandler}
           hideThreadButton={hideThreadButton}
