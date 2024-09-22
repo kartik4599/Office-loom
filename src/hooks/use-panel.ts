@@ -1,4 +1,5 @@
 import { useParentMessageId } from "@/features/messages/store/use-parent-message-id";
+import { Id } from "../../convex/_generated/dataModel";
 
 export const usePanel = () => {
   const [parentMessageId, setParentMessageId] = useParentMessageId();
@@ -7,5 +8,9 @@ export const usePanel = () => {
 
   const onClose = () => setParentMessageId(null);
 
-  return { parentMessageId, onOpenMessage, onClose };
+  return {
+    parentMessageId: parentMessageId as Id<"messages">,
+    onOpenMessage,
+    onClose,
+  };
 };

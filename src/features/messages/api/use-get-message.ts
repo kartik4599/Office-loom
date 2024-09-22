@@ -1,4 +1,4 @@
-import { usePaginatedQuery } from "convex/react";
+import { usePaginatedQuery, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 
@@ -23,4 +23,10 @@ export const useGetMessage = (args: UseGetMessagesProps) => {
   );
 
   return { results, status, loadMore: () => loadMore(BATCH_SIZE) };
+};
+
+export const useGetMessageById = (args: { id: Id<"messages"> }) => {
+  const data = useQuery(api.messages.getById, args);
+  const isLoading = data === undefined;
+  return { isLoading, data };
 };

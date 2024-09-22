@@ -1,7 +1,7 @@
 import { paginationOptsValidator, Query } from "convex/server";
 import { v } from "convex/values";
 import { auth } from "./auth";
-import { Id } from "./_generated/dataModel";
+import { Doc, Id } from "./_generated/dataModel";
 import { mutation, query, QueryCtx } from "./_generated/server";
 
 const populateUser = (ctx: QueryCtx, userId: Id<"users">) => ctx.db.get(userId);
@@ -9,11 +9,42 @@ const populateUser = (ctx: QueryCtx, userId: Id<"users">) => ctx.db.get(userId);
 const populateMember = (ctx: QueryCtx, memberId: Id<"members">) =>
   ctx.db.get(memberId);
 
-const populateReaction = (ctx: QueryCtx, messageId: Id<"messages">) =>
-  ctx.db
+const populateReaction = async (
+  ctx: QueryCtx,
+  messageId: Id<"messages">,
+  currentMember: Doc<"members">
+) => {
+  const reactions = await ctx.db
     .query("reactions")
     .withIndex("by_message_id", (q) => q.eq("messageId", messageId))
     .collect();
+
+  let reactionCount: {
+    value: string;
+    count: number;
+    isSelected: boolean;
+  }[] = [];
+  reactions.forEach((react) => {
+    const reactionIndex = reactionCount.findIndex(
+      ({ value }) => value === react.value
+    );
+    const isSelected = react.memberId === currentMember?._id;
+    if (reactionIndex === -1) {
+      return reactionCount.push({
+        value: react.value,
+        count: 1,
+        isSelected,
+      });
+    }
+    reactionCount[reactionIndex] = {
+      ...reactionCount[reactionIndex],
+      count: reactionCount[reactionIndex].count + 1,
+      isSelected,
+    };
+  });
+
+  return reactionCount;
+};
 
 const populateThread = async (ctx: QueryCtx, messageId: Id<"messages">) => {
   const messages = await ctx.db
@@ -96,42 +127,22 @@ export const get = query({
               message.workspaceId,
               userId
             );
-
-            const reactions = await populateReaction(ctx, message._id);
+            if (!currentMember) return null;
+            const reactions = await populateReaction(
+              ctx,
+              message._id,
+              currentMember
+            );
             const thread = await populateThread(ctx, message._id);
             const image = message.image
               ? await ctx.storage.getUrl(message.image)
               : undefined;
 
-            let reactionCount: {
-              value: string;
-              count: number;
-              isSelected: boolean;
-            }[] = [];
-            reactions.forEach((react) => {
-              const reactionIndex = reactionCount.findIndex(
-                ({ value }) => value === react.value
-              );
-              const isSelected = react.memberId === currentMember?._id;
-              if (reactionIndex === -1) {
-                return reactionCount.push({
-                  value: react.value,
-                  count: 1,
-                  isSelected,
-                });
-              }
-              reactionCount[reactionIndex] = {
-                ...reactionCount[reactionIndex],
-                count: reactionCount[reactionIndex].count + 1,
-                isSelected,
-              };
-            });
-
             return {
               ...message,
               member,
               user,
-              reactions: reactionCount,
+              reactions,
               thread,
               image,
             };
@@ -141,6 +152,34 @@ export const get = query({
         (message): message is NonNullable<typeof message> => message !== null
       ),
     };
+  },
+});
+
+export const getById = query({
+  args: { id: v.id("messages") },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) return null;
+
+    const message = await ctx.db.get(args.id);
+    if (!message) return null;
+
+    const member = await populateMember(ctx, message.memberId);
+    if (!member) return null;
+
+    const user = await populateUser(ctx, member.userId);
+    if (!user) return user;
+
+    const currentMember = await getMember(ctx, message.workspaceId, userId);
+    if (!currentMember) return null;
+
+    const image = message.image
+      ? await ctx.storage.getUrl(message.image)
+      : undefined;
+
+    const reactions = await populateReaction(ctx, message._id, currentMember);
+
+    return { ...message, image, user, member, reactions };
   },
 });
 

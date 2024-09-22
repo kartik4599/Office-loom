@@ -6,8 +6,10 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import Thread from "@/features/messages/components/thread";
 import WorkspaceSidebar from "@/features/workspace/components/work-space-sidebar";
 import { usePanel } from "@/hooks/use-panel";
+import { Loader } from "lucide-react";
 import React from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
@@ -36,7 +38,13 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             <>
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={30} minSize={20}>
-                Load thread
+                {parentMessageId ? (
+                  <Thread messageId={parentMessageId} onClose={onClose} />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <Loader className="size-5 animate-spin text-muted-foreground" />
+                  </div>
+                )}
               </ResizablePanel>
             </>
           )}
