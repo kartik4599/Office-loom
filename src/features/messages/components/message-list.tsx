@@ -1,6 +1,7 @@
 import { useCurrentMember } from "@/features/members/api/use-current-member";
 import { getworkspaceId } from "@/features/workspace/api/use-get-workspaces";
 import { format, isToday, isYesterday, differenceInMinutes } from "date-fns";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { GetMessagesReturnType } from "../api/use-get-message";
@@ -17,6 +18,7 @@ interface MessageListProps {
   variant?: "channel" | "thread" | "conversation";
   data: GetMessagesReturnType;
   loadMore: () => void;
+  isloading: boolean;
   isloadingMore: boolean;
   canLoadMore: boolean;
 }
@@ -51,6 +53,7 @@ const MessageList = ({
   memberImage,
   memberName,
   variant,
+  isloading,
 }: MessageListProps) => {
   const [editingId, setEditingId] = useState<Id<"messages"> | null>(null);
 
@@ -103,6 +106,33 @@ const MessageList = ({
           })}
         </div>
       ))}
+      {isloadingMore && (
+        <div className="text-center my-2 relative">
+          <hr className="absolute top-1/2 left-0 right-0 border-t border-gray-300" />
+          <span className="relative inline-block bg-white px-4 rounded-full text-xs border border-gray-300 shadow-sm">
+            <Loader2 className="size-4 animate-spin" />
+          </span>
+        </div>
+      )}
+      {!isloading && (
+        <div
+          className="h-1"
+          ref={(el) => {
+            if (el) {
+              const observer = new IntersectionObserver(
+                ([entry]) => {
+                  if (entry.isIntersecting && canLoadMore) {
+                    loadMore();
+                  }
+                },
+                { threshold: 1.0 }
+              );
+              observer.observe(el);
+              return () => observer.disconnect();
+            }
+          }}
+        />
+      )}
       {variant === "channel" && channelName && channelCreationTime && (
         <ChannelHero name="General" creationTime={channelCreationTime} />
       )}

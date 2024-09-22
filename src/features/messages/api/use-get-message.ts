@@ -8,7 +8,7 @@ interface UseGetMessagesProps {
   parentMessageId?: Id<"messages">;
 }
 
-const BATCH_SIZE = 20;
+const BATCH_SIZE = 10;
 
 export type GetMessagesReturnType =
   (typeof api.messages.get._returnType)["page"];

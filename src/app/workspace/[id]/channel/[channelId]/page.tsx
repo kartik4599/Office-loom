@@ -31,7 +31,7 @@ const page = () => {
       </div>
     );
   }
-
+  
   return (
     <div className="flex flex-col h-full">
       <Header channel={channel} />
@@ -41,6 +41,7 @@ const page = () => {
         data={results}
         variant="channel"
         loadMore={loadMore}
+        isloading={status==="LoadingFirstPage"}
         isloadingMore={status === "LoadingMore"}
         canLoadMore={status === "CanLoadMore"}
       />
