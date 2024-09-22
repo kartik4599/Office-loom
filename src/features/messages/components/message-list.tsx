@@ -97,7 +97,7 @@ const MessageList = ({
                 threadImage={msg.thread.image}
                 threadTimestamp={msg.thread.timestamp}
                 image={msg.image}
-                //   reactions={msg.reactions}s
+                reactions={msg.reactions}
               />
             );
           })}

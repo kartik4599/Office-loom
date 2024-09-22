@@ -91,6 +91,11 @@ export const get = query({
             const member = await populateMember(ctx, message.memberId);
             const user = member ? await populateUser(ctx, member.userId) : null;
             if (!member || !user) return null;
+            const currentMember = await getMember(
+              ctx,
+              message.workspaceId,
+              userId
+            );
 
             const reactions = await populateReaction(ctx, message._id);
             const thread = await populateThread(ctx, message._id);
@@ -98,11 +103,28 @@ export const get = query({
               ? await ctx.storage.getUrl(message.image)
               : undefined;
 
-            const reactionCount: Record<string, Id<"members">[]> = {};
-
+            let reactionCount: {
+              value: string;
+              count: number;
+              isSelected: boolean;
+            }[] = [];
             reactions.forEach((react) => {
-              if (!reactionCount[react.value]) reactionCount[react.value] = [];
-              reactionCount[react.value].push(react.memberId);
+              const reactionIndex = reactionCount.findIndex(
+                ({ value }) => value === react.value
+              );
+              const isSelected = react.memberId === currentMember?._id;
+              if (reactionIndex === -1) {
+                return reactionCount.push({
+                  value: react.value,
+                  count: 1,
+                  isSelected,
+                });
+              }
+              reactionCount[reactionIndex] = {
+                ...reactionCount[reactionIndex],
+                count: reactionCount[reactionIndex].count + 1,
+                isSelected,
+              };
             });
 
             return {

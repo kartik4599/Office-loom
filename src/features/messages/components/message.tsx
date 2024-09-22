@@ -11,6 +11,8 @@ import { useDeleteMessage } from "../api/use-delete-message";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useConfirm } from "@/components/ui/confirm-dialog";
+import { useToggleReaction } from "@/features/reaction/api/use-toggle-reaction";
+import Reactions from "./reactions";
 const Renderer = dynamic(() => import("./renderer"));
 const Editor = dynamic(() => import("@/components/editor"));
 
@@ -20,12 +22,13 @@ interface MessageProps {
   authorImage?: string;
   authorName?: string;
   isAuthor: boolean;
-  reactions?: Array<
-    Omit<Doc<"reactions">, "memberId"> & {
-      memberId: Id<"members">;
-      count: number;
-    }
-  >;
+  // reactions?: Array<
+  //   Omit<Doc<"reactions">, "memberId"> & {
+  //     memberId: Id<"members">;
+  //     count: number;
+  //   }
+  // >;
+  reactions?: any;
   body: Doc<"messages">["body"];
   image?: string | null;
   createdAt: Doc<"messages">["_creationTime"];
@@ -69,10 +72,23 @@ const Message = ({
   const { mutate: deleteMessage, isPending: deleteloading } =
     useDeleteMessage();
 
+  const { mutate: reactMessage } = useToggleReaction();
+
   const { confirm, ConfirmDialog } = useConfirm(
     "Delete message",
     "Are you sure you want to delete this message? This connot be undone."
   );
+
+  const reactionHandler = (value: string) => {
+    reactMessage(
+      { messageId: id, value },
+      {
+        onError: () => {
+          toast.error("Failed to add reaction");
+        },
+      }
+    );
+  };
 
   const updateHandler = ({ body }: { body: string }) => {
     updateMessage(
@@ -114,6 +130,7 @@ const Message = ({
       {updatedAt && (
         <span className="text-xs text-muted-foreground">(edited)</span>
       )}
+      <Reactions data={reactions} onChange={reactionHandler} />
     </div>
   );
 
@@ -184,7 +201,7 @@ const Message = ({
           handleEdit={() => setEditingId(id)}
           handleThread={() => {}}
           handleDelete={deleteHandler}
-          handleReaction={() => {}}
+          handleReaction={reactionHandler}
           hideThreadButton={hideThreadButton}
         />
       )}

@@ -48,7 +48,7 @@ const schema = defineSchema({
     ]),
   reactions: defineTable({
     workspaceId: v.id("workspaces"),
-    messageId: v.optional(v.id("messages")),
+    messageId: v.id("messages"),
     memberId: v.id("members"),
     value: v.string(),
   })

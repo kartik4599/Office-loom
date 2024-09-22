@@ -9,7 +9,9 @@ import { Loader, TriangleAlert } from "lucide-react";
 
 const page = () => {
   const { data: channel, isLoading, channelId } = useGetChannel();
-  const { results, loadMore, status } = useGetMessage({ channelId });
+  const { results, loadMore, status } = useGetMessage({
+    channelId,
+  });
 
   if (isLoading && status === "LoadingFirstPage") {
     return (
