@@ -61,7 +61,7 @@ const Profile = ({ profileMemberId, onClose }: ProfileProps) => {
         onSuccess: () => {
           onClose();
           toast.success("Member removed");
-          router.push("/");
+          if(type==="leave") router.push("/");
         },
         onError: () => {
           toast.error("Error Occured");
