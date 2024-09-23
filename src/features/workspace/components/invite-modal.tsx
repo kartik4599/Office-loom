@@ -27,10 +27,7 @@ const InviteModal = ({
   workspace,
 }: PreferencesComponentProps) => {
   const { mutate, isPending } = useUpdateWorkspaceJoinCode();
-  const { ConfirmDialog, confirm } = useConfirm(
-    "Are you sure?",
-    "This will deactivate the current invite code and generate a new one"
-  );
+  const { ConfirmDialog, confirm } = useConfirm();
 
   const handleCopy = async () => {
     const inviteLink = `${window.location.origin}/join/${workspace._id}`;
@@ -40,7 +37,11 @@ const InviteModal = ({
   };
 
   const handleNewCode = async () => {
-    const ok = await confirm();
+    const ok = await confirm({
+      title: "Are you sure?",
+      message:
+        "This will deactivate the current invite code and generate a new one",
+    });
     if (!ok) return;
     mutate(
       { id: workspace._id },

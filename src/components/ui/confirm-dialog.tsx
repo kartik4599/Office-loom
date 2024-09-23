@@ -9,12 +9,17 @@ import {
   DialogTitle,
 } from "./dialog";
 
-export const useConfirm = (title: string, message?: string) => {
+export const useConfirm = () => {
   const [promise, setpromise] = useState<{
     resolve: (value: boolean) => void;
   } | null>(null);
 
-  const confirm = () => new Promise((resolve) => setpromise({ resolve }));
+  const [data, setdata] = useState<{ title: string; message?: string }>();
+
+  const confirm = (args: { title: string; message?: string }) => {
+    setdata(args);
+    return new Promise((resolve) => setpromise({ resolve }));
+  };
   const cancel = () => setpromise(null);
 
   const handleCancel = () => {
@@ -31,8 +36,8 @@ export const useConfirm = (title: string, message?: string) => {
     <Dialog open={promise !== null} onOpenChange={cancel}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{message}</DialogDescription>
+          <DialogTitle>{data?.title}</DialogTitle>
+          <DialogDescription>{data?.message}</DialogDescription>
         </DialogHeader>
         <DialogFooter className="pt-2">
           <Button onClick={handleCancel}>Cancel</Button>

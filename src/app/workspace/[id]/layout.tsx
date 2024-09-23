@@ -54,7 +54,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
                   </div>
                   {parentMessageId && <Thread messageId={parentMessageId} />}
                   {profileMemberId && (
-                    <Profile profileMemberId={profileMemberId} />
+                    <Profile profileMemberId={profileMemberId} onClose={onClose} />
                   )}
                 </div>
               </ResizablePanel>

@@ -81,10 +81,7 @@ const Message = ({
   const { onOpenMessage, onClose, parentMessageId, onOpenProfileMember } =
     usePanel();
 
-  const { confirm, ConfirmDialog } = useConfirm(
-    "Delete message",
-    "Are you sure you want to delete this message? This connot be undone."
-  );
+  const { confirm, ConfirmDialog } = useConfirm();
 
   const reactionHandler = (value: string) => {
     reactMessage(
@@ -113,7 +110,11 @@ const Message = ({
   };
 
   const deleteHandler = async () => {
-    const ok = await confirm();
+    const ok = await confirm({
+      title: "Delete message",
+      message:
+        "Are you sure you want to delete this message? This connot be undone.",
+    });
     if (!ok) return;
 
     deleteMessage(

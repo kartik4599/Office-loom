@@ -7,14 +7,14 @@ import { useDeleteWorkspaces } from "../api/use-delete-workspaces";
 
 const DeleteWorkspaceComponent = ({ id }: { id: Id<"workspaces"> }) => {
   const { mutate, isPending } = useDeleteWorkspaces();
-  const { confirm, ConfirmDialog } = useConfirm(
-    "Delete workspace",
-    "Are you sure you want to delete this workspace?"
-  );
+  const { confirm, ConfirmDialog } = useConfirm();
   const router = useRouter();
 
   const handleRemove = async () => {
-    const success = await confirm();
+    const success = await confirm({
+      title: "Delete workspace",
+      message: "Are you sure you want to delete this workspace?",
+    });
     if (!success) return;
 
     mutate(

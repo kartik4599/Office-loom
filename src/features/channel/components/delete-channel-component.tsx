@@ -7,14 +7,14 @@ import { useDeleteChannel } from "../api/use-delete-channel";
 
 const DeletechannelComponent = ({ id }: { id: Id<"channels"> }) => {
   const { mutate, isPending } = useDeleteChannel();
-  const { confirm, ConfirmDialog } = useConfirm(
-    "Delete channel",
-    "Are you sure you want to delete this channel?"
-  );
+  const { confirm, ConfirmDialog } = useConfirm();
   const router = useRouter();
 
   const handleRemove = async () => {
-    const success = await confirm();
+    const success = await confirm({
+      title: "Delete channel",
+      message: "Are you sure you want to delete this channel?",
+    });
     if (!success) return;
 
     mutate(
