@@ -138,14 +138,33 @@ export const remove = mutation({
 
     if (!member || member.role !== "admin") return null;
 
-    const [members] = await Promise.all([
+    const allData = await Promise.all([
       ctx.db
         .query("members")
         .withIndex("by_workspace_id", (q) => q.eq("workspaceId", args.id))
         .collect(),
+      ctx.db
+        .query("channels")
+        .withIndex("by_workspace_id", (q) => q.eq("workspaceId", args.id))
+        .collect(),
+      ctx.db
+        .query("messages")
+        .withIndex("by_workspace_id", (q) => q.eq("workspaceId", args.id))
+        .collect(),
+      ctx.db
+        .query("reactions")
+        .withIndex("by_workspace_id", (q) => q.eq("workspaceId", args.id))
+        .collect(),
     ]);
 
-    await Promise.all(members.map(async ({ _id }) => await ctx.db.delete(_id)));
+    await Promise.all(
+      allData.map(
+        async (data) =>
+          await Promise.all(
+            data.map(async ({ _id }) => await ctx.db.delete(_id))
+          )
+      )
+    );
 
     await ctx.db.delete(args.id);
     return args.id;
