@@ -14,6 +14,7 @@ import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useToggleReaction } from "@/features/reaction/api/use-toggle-reaction";
 import Reactions from "./reactions";
 import { usePanel } from "@/hooks/use-panel";
+import ThreadBar from "./threadBar";
 const Renderer = dynamic(() => import("./renderer"));
 const Editor = dynamic(() => import("@/components/editor"));
 
@@ -40,6 +41,7 @@ interface MessageProps {
   hideThreadButton?: boolean;
   threadCount?: number;
   threadImage?: string;
+  threadName?: string;
   threadTimestamp?: number;
 }
 
@@ -63,6 +65,7 @@ const Message = ({
   isCompact,
   threadCount,
   threadImage,
+  threadName,
   threadTimestamp,
 }: MessageProps) => {
   const avatarFallback = authorName?.charAt(0).toUpperCase();
@@ -135,6 +138,13 @@ const Message = ({
         <span className="text-xs text-muted-foreground">(edited)</span>
       )}
       <Reactions data={reactions} onChange={reactionHandler} />
+      <ThreadBar
+        threadCount={threadCount}
+        threadImage={threadImage}
+        threadName={threadName}
+        threadTimestamp={threadTimestamp}
+        onClick={onOpenMessage.bind(null, id)}
+      />
     </div>
   );
 

@@ -100,6 +100,7 @@ const MessageList = ({
                 hideThreadButton={variant === "thread"}
                 threadImage={msg.thread.image}
                 threadTimestamp={msg.thread.timestamp}
+                threadName={msg.thread.name}
                 image={msg.image}
                 reactions={msg.reactions}
               />
