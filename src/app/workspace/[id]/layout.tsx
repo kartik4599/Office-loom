@@ -7,15 +7,16 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import Profile from "@/features/members/components/profile";
 import Thread from "@/features/messages/components/thread";
 import WorkspaceSidebar from "@/features/workspace/components/work-space-sidebar";
 import { usePanel } from "@/hooks/use-panel";
-import { Loader, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import React from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
-  const { parentMessageId, onClose } = usePanel();
-  const showPanel = !!parentMessageId;
+  const { parentMessageId, onClose, profileMemberId } = usePanel();
+  const showPanel = !!parentMessageId || !!profileMemberId;
 
   return (
     <div className="h-full">
@@ -39,24 +40,23 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             <>
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={30} minSize={20}>
-                {parentMessageId ? (
-                  <div className="h-full flex flex-col">
-                    <div className="h-[49px] flex justify-between items-center px-4 border-b">
-                      <p className="text-lg font-bold">Thread</p>
-                      <Button
-                        onClick={onClose}
-                        size="iconSmall"
-                        variant={"ghost"}>
-                        <XIcon />
-                      </Button>
-                    </div>
-                    <Thread messageId={parentMessageId} onClose={onClose} />
+                <div className="h-full flex flex-col">
+                  <div className="h-[49px] flex justify-between items-center px-4 border-b">
+                    <p className="text-lg font-bold">
+                      {parentMessageId ? "Thread" : "Profile"}
+                    </p>
+                    <Button
+                      onClick={onClose}
+                      size="iconSmall"
+                      variant={"ghost"}>
+                      <XIcon />
+                    </Button>
                   </div>
-                ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <Loader className="size-5 animate-spin text-muted-foreground" />
-                  </div>
-                )}
+                  {parentMessageId && <Thread messageId={parentMessageId} />}
+                  {profileMemberId && (
+                    <Profile profileMemberId={profileMemberId} />
+                  )}
+                </div>
               </ResizablePanel>
             </>
           )}

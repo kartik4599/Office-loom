@@ -17,7 +17,6 @@ const Editor = dynamic(() => import("@/components/editor"));
 
 interface ThreadProps {
   messageId: Id<"messages">;
-  onClose: () => void;
 }
 
 const Thread = ({ messageId }: ThreadProps) => {

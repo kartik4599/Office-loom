@@ -78,7 +78,8 @@ const Message = ({
 
   const { mutate: reactMessage } = useToggleReaction();
 
-  const { onOpenMessage, onClose, parentMessageId } = usePanel();
+  const { onOpenMessage, onClose, parentMessageId, onOpenProfileMember } =
+    usePanel();
 
   const { confirm, ConfirmDialog } = useConfirm(
     "Delete message",
@@ -159,7 +160,7 @@ const Message = ({
     </div>
   ) : (
     <>
-      <button>
+      <button onClick={onOpenProfileMember.bind(null, memberId)}>
         <Avatar className="size-8 rounded-full mr-1">
           <AvatarImage className="rounded-full" src={authorImage} />
           <AvatarFallback className="rounded-full bg-purple-600 text-white text-xs">
@@ -169,7 +170,9 @@ const Message = ({
       </button>
       <div className="flex flex-col w-full overflow-hidden">
         <div className="text-sm">
-          <button className="font-bold text-primary hover:underline">
+          <button
+            onClick={onOpenProfileMember.bind(null, memberId)}
+            className="font-bold text-primary hover:underline">
             {authorName}
           </button>
           <span>&nbsp;&nbsp;</span>

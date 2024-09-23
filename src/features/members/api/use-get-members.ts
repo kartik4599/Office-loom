@@ -9,8 +9,8 @@ export const useGetMembers = (workspaceId: Id<"workspaces">) => {
   return { data, isLoading };
 };
 
-export const useGetMember = () => {
-  const memberId = useGetMemberId();
+export const useGetMember = (id?: Id<"members">) => {
+  const memberId = id || useGetMemberId();
   const data = useQuery(api.members.getById, { memberId });
   const isLoading = data === undefined;
   return { data, isLoading };

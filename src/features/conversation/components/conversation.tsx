@@ -1,6 +1,7 @@
 import { useGetMember } from "@/features/members/api/use-get-members";
 import { useGetMessage } from "@/features/messages/api/use-get-message";
 import MessageList from "@/features/messages/components/message-list";
+import { usePanel } from "@/hooks/use-panel";
 import { Loader } from "lucide-react";
 import React from "react";
 import { Id } from "../../../../convex/_generated/dataModel";
@@ -10,6 +11,7 @@ import Header from "./Header";
 const Conversation = ({ id }: { id: Id<"conversations"> }) => {
   const { data, isLoading } = useGetMember();
   const { results, loadMore, status } = useGetMessage({ conversationId: id });
+  const { onOpenProfileMember } = usePanel();
 
   if (status === "LoadingFirstPage" || isLoading) {
     return (
@@ -19,12 +21,14 @@ const Conversation = ({ id }: { id: Id<"conversations"> }) => {
     );
   }
 
+  if (!data) return null;
+
   return (
     <div className="flex flex-col h-full">
       <Header
         memberImage={data?.user.image}
         memberName={data?.user.name}
-        onClick={() => {}}
+        onClick={onOpenProfileMember.bind(null, data?._id)}
       />
       <MessageList
         canLoadMore={status === "CanLoadMore"}
