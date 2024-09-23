@@ -4,7 +4,10 @@ import {
 } from "@/features/channel/api/use-get-channels";
 import { useCreateChannelModal } from "@/features/channel/store/use-create-channel-modal";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
-import { useGetMembers } from "@/features/members/api/use-get-members";
+import {
+  useGetMemberId,
+  useGetMembers,
+} from "@/features/members/api/use-get-members";
 import { useGetWorkspace } from "@/features/workspace/api/use-get-workspaces";
 import {
   AlertTriangle,
@@ -30,6 +33,8 @@ const WorkspaceSidebar = () => {
   const { data: members } = useGetMembers(workspaceId);
   const [_, setOpen] = useCreateChannelModal();
   const channelId = useGetChannelId();
+  const memberId = useGetMemberId();
+
   if (workspaceLoading || memberLoading) {
     return (
       <div className="flex flex-col bg-[#5E2C5F] h-full items-center justify-center">
@@ -82,12 +87,13 @@ const WorkspaceSidebar = () => {
         ))}
       </WorkspaceSection>
       <WorkspaceSection label="Direct Message" hint="New channel">
-        {members?.map((member) => (
+        {members?.map(({ member, user }) => (
           <UserItems
-            id={member.user._id}
+            id={member._id}
             workspaceId={workspaceId}
-            image={member.user.image}
-            label={member.user.name}
+            image={user.image}
+            label={user.name}
+            variant={memberId === member._id ? "active" : "default"}
           />
         ))}
       </WorkspaceSection>

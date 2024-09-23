@@ -19,7 +19,7 @@ const userItemVariants = cva(
 );
 
 interface UserItemsProps {
-  id: Id<"users">;
+  id: Id<"members">;
   workspaceId: string;
   label?: string;
   image?: string;

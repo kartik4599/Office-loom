@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { GetMessagesReturnType } from "../api/use-get-message";
 import ChannelHero from "./channel-hero";
+import ConversationHero from "./conversation-hero";
 import Message from "./message";
 
 const TIME_THRESHOLD = 5;
@@ -134,7 +135,10 @@ const MessageList = ({
         />
       )}
       {variant === "channel" && channelName && channelCreationTime && (
-        <ChannelHero name="General" creationTime={channelCreationTime} />
+        <ChannelHero name={channelName} creationTime={channelCreationTime} />
+      )}
+      {variant === "conversation" && (
+        <ConversationHero memberName={memberName} memberImage={memberImage} />
       )}
     </div>
   );
