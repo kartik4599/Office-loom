@@ -1,9 +1,5 @@
-import {
-  convexAuthNextjsMiddleware,
-  createRouteMatcher,
-  isAuthenticatedNextjs,
-  nextjsMiddlewareRedirect,
-} from "@convex-dev/auth/nextjs/server";
+// @ts-ignore
+import {convexAuthNextjsMiddleware,createRouteMatcher,isAuthenticatedNextjs,nextjsMiddlewareRedirect} from "@convex-dev/auth/nextjs/server";
 import { NextRequest } from "next/server";
 const isAuthPage = createRouteMatcher(["/auth"]);
 
