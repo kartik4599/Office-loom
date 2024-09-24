@@ -1,7 +1,7 @@
 import EmojiPopover from "@/components/emoji-popover";
 import Hint from "@/components/ui/hint";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
-import { getworkspaceId } from "@/features/workspace/api/use-get-workspaces";
+import { GetworkspaceId } from "@/features/workspace/api/use-get-workspaces";
 import { cn } from "@/lib/utils";
 import { SmilePlus } from "lucide-react";
 
@@ -15,7 +15,7 @@ interface ReactionsProps {
 }
 
 const Reactions = ({ data, onChange }: ReactionsProps) => {
-  const workspaceId = getworkspaceId();
+  const workspaceId = GetworkspaceId();
   const { data: member } = useCurrentMember(workspaceId);
   if (data.length === 0 || !member) return null;
 

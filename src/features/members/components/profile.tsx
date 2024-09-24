@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { getworkspaceId } from "@/features/workspace/api/use-get-workspaces";
+import { GetworkspaceId } from "@/features/workspace/api/use-get-workspaces";
 import { AlertTriangle, ChevronDown, Loader, MailIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,7 @@ const Profile = ({ profileMemberId, onClose }: ProfileProps) => {
 
   const { data: member, isLoading } = useGetMember(profileMemberId);
 
-  const workspaceId = getworkspaceId();
+  const workspaceId = GetworkspaceId();
   const { data: currentMember } = useCurrentMember(workspaceId);
 
   const { mutate: updateMember, isPending: isUpdatePending } =

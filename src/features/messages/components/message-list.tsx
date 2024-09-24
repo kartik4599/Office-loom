@@ -1,5 +1,5 @@
 import { useCurrentMember } from "@/features/members/api/use-current-member";
-import { getworkspaceId } from "@/features/workspace/api/use-get-workspaces";
+import { GetworkspaceId } from "@/features/workspace/api/use-get-workspaces";
 import { format, isToday, isYesterday, differenceInMinutes } from "date-fns";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -59,7 +59,7 @@ const MessageList = ({
   const [editingId, setEditingId] = useState<Id<"messages"> | null>(null);
 
   const groupedMessage = getGroupedMessage(data);
-  const workspaceId = getworkspaceId();
+  const workspaceId = GetworkspaceId();
   const { data: member } = useCurrentMember(workspaceId);
 
   return (

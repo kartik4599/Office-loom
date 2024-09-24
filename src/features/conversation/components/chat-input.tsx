@@ -1,7 +1,7 @@
-import { useGetChannelId } from "@/features/channel/api/use-get-channels";
+import { UseGetChannelId } from "@/features/channel/api/use-get-channels";
 import { useCreateMessage } from "@/features/messages/api/use-create-message";
 import { useGenerateUpload } from "@/features/storage/api/use-generate-upload";
-import { getworkspaceId } from "@/features/workspace/api/use-get-workspaces";
+import { GetworkspaceId } from "@/features/workspace/api/use-get-workspaces";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Id } from "../../../../convex/_generated/dataModel";
@@ -21,8 +21,8 @@ export interface CreateMessageValues {
 const ChatInput = ({ placeholder, conversationId }: ChatInputProps) => {
   const { mutate: mutateMessage } = useCreateMessage();
   const { mutate: mutateImage } = useGenerateUpload();
-  const workspaceId = getworkspaceId();
-  const channelId = useGetChannelId();
+  const workspaceId = GetworkspaceId();
+  const channelId = UseGetChannelId();
   const [editorChange, seteditorChange] = useState(0);
   const [loading, setloading] = useState(false);
 

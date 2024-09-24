@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { getworkspaceId } from "@/features/workspace/api/use-get-workspaces";
+import { GetworkspaceId } from "@/features/workspace/api/use-get-workspaces";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -20,7 +20,7 @@ const CreateChannelModal = () => {
   const [name, setName] = useState("");
   const [open, setOpen] = useCreateChannelModal();
   const { mutate, isPending } = useCreateChannel();
-  const workspaceId = getworkspaceId();
+  const workspaceId = GetworkspaceId();
   const router = useRouter();
 
   const afterSubmit = () => {

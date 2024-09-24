@@ -1,6 +1,6 @@
 import {
   useGetMember,
-  getMemberId,
+  GetMemberId,
 } from "@/features/members/api/use-get-members";
 import { useGetMessage } from "@/features/messages/api/use-get-message";
 import MessageList from "@/features/messages/components/message-list";
@@ -12,7 +12,7 @@ import ChatInput from "./chat-input";
 // import Header from "./Header";
 
 const Conversation = ({ id }: { id: Id<"conversations"> }) => {
-  const memberId = getMemberId();
+  const memberId = GetMemberId();
   const { data, isLoading } = useGetMember(memberId);
   const { results, loadMore, status } = useGetMessage({ conversationId: id });
   // const { onOpenProfileMember } = usePanel();

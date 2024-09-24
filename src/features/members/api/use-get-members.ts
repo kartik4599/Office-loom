@@ -15,7 +15,7 @@ export const useGetMember = (memberId: Id<"members">) => {
   return { data, isLoading };
 };
 
-export const getMemberId = () => {
+export const GetMemberId = () => {
   const params = useParams();
   const memberId = params.memberId as Id<"members">;
 

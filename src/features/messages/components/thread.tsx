@@ -1,10 +1,10 @@
 import { CreateMessageValues } from "@/components/chat-input";
 import { Button } from "@/components/ui/button";
-import { useGetChannelId } from "@/features/channel/api/use-get-channels";
+import { UseGetChannelId } from "@/features/channel/api/use-get-channels";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
 import { useGetMembers } from "@/features/members/api/use-get-members";
 import { useGenerateUpload } from "@/features/storage/api/use-generate-upload";
-import { getworkspaceId } from "@/features/workspace/api/use-get-workspaces";
+import { GetworkspaceId } from "@/features/workspace/api/use-get-workspaces";
 import { AlertTriangle, Loader, XIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
@@ -21,8 +21,8 @@ interface ThreadProps {
 
 const Thread = ({ messageId }: ThreadProps) => {
   const { data: message, isLoading } = useGetMessageById({ id: messageId });
-  const workspaceId = getworkspaceId();
-  const channelId = useGetChannelId();
+  const workspaceId = GetworkspaceId();
+  const channelId = UseGetChannelId();
   const { data: member } = useCurrentMember(workspaceId);
   const { mutate: mutateImage } = useGenerateUpload();
   const { mutate: mutateMessage } = useCreateMessage();
