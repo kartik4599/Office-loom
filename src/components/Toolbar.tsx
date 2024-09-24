@@ -2,6 +2,7 @@ import { useGetChannels } from "@/features/channel/api/use-get-channels";
 import { useGetMembers } from "@/features/members/api/use-get-members";
 import { useGetWorkspace } from "@/features/workspace/api/use-get-workspaces";
 import { Info, Search } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -47,7 +48,9 @@ const Toolbar = () => {
   return (
     <>
       <nav className="bg-[#2D5D62] flex items-center justify-between h-10 p-1.5">
-        <div className="flex-1" />
+        <div className="flex-1 mt-2 ml-2">
+          <Image src="/logo.png" alt="as" height={130} width={130} />
+        </div>
         <div className="min-w-[280px] max-[642px] grow-[2] shrink">
           <Button
             onClick={() => setOpen(true)}
