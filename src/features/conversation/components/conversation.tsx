@@ -9,13 +9,13 @@ import { Loader } from "lucide-react";
 import React from "react";
 import { Id } from "../../../../convex/_generated/dataModel";
 import ChatInput from "./chat-input";
-// import Header from "./Header";
+import Header from "./header";
 
 const Conversation = ({ id }: { id: Id<"conversations"> }) => {
   const memberId = GetMemberId();
   const { data, isLoading } = useGetMember(memberId);
   const { results, loadMore, status } = useGetMessage({ conversationId: id });
-  // const { onOpenProfileMember } = usePanel();
+  const { onOpenProfileMember } = usePanel();
 
   if (status === "LoadingFirstPage" || isLoading) {
     return (
@@ -29,11 +29,11 @@ const Conversation = ({ id }: { id: Id<"conversations"> }) => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* <Header
+      <Header
         memberImage={data?.user.image}
         memberName={data?.user.name}
         onClick={onOpenProfileMember.bind(null, data?._id)}
-      /> */}
+      />
       <MessageList
         canLoadMore={status === "CanLoadMore"}
         data={results}
