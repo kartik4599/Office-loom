@@ -12,9 +12,7 @@ export const useGetWorkspaces = () => {
 
 export const useGetWorkspace = () => {
   const workspaceId = GetworkspaceId();
-
-  let data = null;
-  if (workspaceId) data = useQuery(api.workspaces.getById, { id: workspaceId });
+  const data = useQuery(api.workspaces.getById, { id: workspaceId });
   const isLoading = data === undefined;
 
   return { data, isLoading, workspaceId };
@@ -22,10 +20,7 @@ export const useGetWorkspace = () => {
 
 export const useGetWorkspaceInfo = () => {
   const workspaceId = GetworkspaceId();
-
-  let data = null;
-  if (workspaceId)
-    data = useQuery(api.workspaces.getInfoById, { id: workspaceId });
+  const data = useQuery(api.workspaces.getInfoById, { id: workspaceId });
   const isLoading = data === undefined;
 
   return { data, isLoading, workspaceId };
