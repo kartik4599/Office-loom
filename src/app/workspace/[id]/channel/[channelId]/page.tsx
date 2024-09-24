@@ -7,7 +7,7 @@ import { useGetMessage } from "@/features/messages/api/use-get-message";
 import MessageList from "@/features/messages/components/message-list";
 import { Loader, TriangleAlert } from "lucide-react";
 
-const page = () => {
+const Page = () => {
   const { data: channel, isLoading, channelId } = useGetChannel();
   const { results, loadMore, status } = useGetMessage({
     channelId,
@@ -50,4 +50,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

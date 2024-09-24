@@ -142,7 +142,7 @@ const Editor = ({
         innerRef.current = null;
       }
     };
-  }, []);
+  }, [innerRef]);
 
   const toggleToolbar = () => {
     setIsToolbarVisiable();
@@ -187,7 +187,7 @@ const Editor = ({
         {images.length > 0 && (
           <div className="flex">
             {Array.from(images).map((item, index) => (
-              <div className="p-2">
+              <div className="p-2" key={index}>
                 <div className="relative size-[62px] flex items-center justify-center group/image">
                   <button
                     onClick={onImageCancle.bind(null, index)}

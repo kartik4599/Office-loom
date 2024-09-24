@@ -14,7 +14,7 @@ import { usePanel } from "@/hooks/use-panel";
 import { XIcon } from "lucide-react";
 import React from "react";
 
-const layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   const { parentMessageId, onClose, profileMemberId } = usePanel();
   const showPanel = !!parentMessageId || !!profileMemberId;
 
@@ -70,4 +70,4 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default layout;
+export default Layout;

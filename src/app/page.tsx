@@ -18,7 +18,7 @@ export default function Home() {
       setOpen(false);
       router.replace("/workspace/" + workSpaceId);
     } else if (!open) setOpen(true);
-  }, [workSpaceId, open, data]);
+  }, [workSpaceId, open, data, router, setOpen]);
 
   return data === undefined ? "Loading..." : <></>;
 }

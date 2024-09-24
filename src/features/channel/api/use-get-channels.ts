@@ -12,8 +12,7 @@ export const useGetChannels = (workspaceId: Id<"workspaces">) => {
 export const useGetChannel = () => {
   const channelId = useGetChannelId();
 
-  let data = null;
-  if (channelId) data = useQuery(api.channels.getById, { id: channelId });
+  const data = useQuery(api.channels.getById, { id: channelId });
   const isLoading = data === undefined;
 
   return { channelId, data, isLoading };

@@ -10,8 +10,8 @@ export const useGetMembers = (workspaceId: Id<"workspaces">) => {
 };
 
 export const useGetMember = (id?: Id<"members">) => {
-  const memberId = id || useGetMemberId();
-  const data = useQuery(api.members.getById, { memberId });
+  const args = { memberId: id || useGetMemberId() };
+  const data = useQuery(api.members.getById, args);
   const isLoading = data === undefined;
   return { data, isLoading };
 };

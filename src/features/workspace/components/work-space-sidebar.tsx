@@ -78,6 +78,7 @@ const WorkspaceSidebar = () => {
         onNew={member.role === "admin" ? () => setOpen(true) : undefined}>
         {channels?.map((item) => (
           <SidebarItem
+            key={item._id}
             label={item.name}
             id={item._id}
             icon={Hash}
@@ -89,6 +90,7 @@ const WorkspaceSidebar = () => {
       <WorkspaceSection label="Direct Message" hint="New channel">
         {members?.map(({ member, user }) => (
           <UserItems
+            key={member._id}
             id={member._id}
             workspaceId={workspaceId}
             image={user.image}

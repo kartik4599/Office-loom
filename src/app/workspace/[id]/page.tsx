@@ -8,7 +8,7 @@ import { Loader, TriangleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const {
     data: workspace,
@@ -28,7 +28,17 @@ const page = () => {
     if (channelId) {
       router.push(`/workspace/${workspaceId}/channel/${channelId}`);
     } else if (!open && member?.role === "admin") setOpen(true);
-  }, [channelId, workspaceLoading, channelLoading, router, open]);
+  }, [
+    channelId,
+    workspaceLoading,
+    channelLoading,
+    router,
+    open,
+    workspace,
+    member?.role,
+    setOpen,
+    workspaceId,
+  ]);
 
   if (workspaceLoading || channelLoading) {
     return (
@@ -57,4 +67,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

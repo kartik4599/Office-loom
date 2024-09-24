@@ -97,7 +97,7 @@ const SigninCard = ({ changeState }: { changeState: () => void }) => {
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          Dont't have an account?{" "}
+          Dont't have an account?
           <span
             onClick={changeState}
             className="text-sky-700 hover:underline cursor-pointer">

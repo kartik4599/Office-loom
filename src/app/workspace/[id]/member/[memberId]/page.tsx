@@ -7,7 +7,7 @@ import { Loader, TriangleAlert } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-const page = () => {
+const Page = () => {
   const memberId = useGetMemberId();
   const workspaceId = getworkspaceId();
   const { data, mutate, isPending } = useGetOrCreateConversation();
@@ -21,7 +21,7 @@ const page = () => {
         },
       }
     );
-  }, [memberId, workspaceId]);
+  }, [memberId, workspaceId, mutate]);
 
   if (isPending) {
     return (
@@ -42,4 +42,4 @@ const page = () => {
   return <Conversation id={data} />;
 };
 
-export default page;
+export default Page;
