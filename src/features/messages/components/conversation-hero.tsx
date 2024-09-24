@@ -14,7 +14,7 @@ const ConversationHero = ({
       <div className="flex items-center gap-x-1 mb-2">
         <Avatar className="size-14 mr-2">
           <AvatarImage src={memberImage} />
-          <AvatarFallback className="bg-violet-500 font-bold">
+          <AvatarFallback className="bg-[#C5E4EA] font-bold">
             {memberName?.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>

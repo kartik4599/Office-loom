@@ -11,7 +11,7 @@ const userItemVariants = cva(
     variants: {
       variant: {
         default: "text-[#f9edffcc]",
-        active: "text-[#481349] bg-white/90 hover:bg-white/90",
+        active: "text-[#6786B7] bg-white/90 hover:bg-white/90",
       },
     },
     defaultVariants: { variant: "default" },
@@ -44,7 +44,7 @@ const UserItems = ({
       <Link href={`/workspace/${workspaceId}/member/${id}`}>
         <Avatar className="size-5 rounded-md mr-1">
           <AvatarImage className="rounded-full" src={image} />
-          <AvatarFallback className="bg-violet-500 text-xs font-bold">
+          <AvatarFallback className="bg-[#C5E4EA] text-[#6786B7] text-xs font-bold">
             {avatarFallback}
           </AvatarFallback>
         </Avatar>

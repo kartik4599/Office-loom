@@ -25,11 +25,12 @@ const layout = ({ children }: { children: React.ReactNode }) => {
         <SideBar />
         <ResizablePanelGroup
           direction="horizontal"
-          autoSaveId={"ca-workspace-layout"}>
+          autoSaveId={"ca-workspace-layout"}
+        >
           <ResizablePanel
             defaultSize={20}
             minSize={15}
-            className="bg-[#5E2C5F]">
+            className="bg-[#8199c3]">
             <WorkspaceSidebar />
           </ResizablePanel>
           <ResizableHandle withHandle />
@@ -54,7 +55,10 @@ const layout = ({ children }: { children: React.ReactNode }) => {
                   </div>
                   {parentMessageId && <Thread messageId={parentMessageId} />}
                   {profileMemberId && (
-                    <Profile profileMemberId={profileMemberId} onClose={onClose} />
+                    <Profile
+                      profileMemberId={profileMemberId}
+                      onClose={onClose}
+                    />
                   )}
                 </div>
               </ResizablePanel>

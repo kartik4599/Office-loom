@@ -27,7 +27,7 @@ const ThreadBar = ({
       <div className="flex items-center gap-2 overflow-hidden">
         <Avatar className="size-6 shrink-0">
           <AvatarImage src={threadImage} />
-          <AvatarFallback className="bg-violet-500 font-bold">
+          <AvatarFallback className="bg-[#C5E4EA] font-bold">
             {avatarFallback}
           </AvatarFallback>
         </Avatar>

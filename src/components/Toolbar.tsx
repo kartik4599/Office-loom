@@ -3,7 +3,7 @@ import { useGetMembers } from "@/features/members/api/use-get-members";
 import { useGetWorkspace } from "@/features/workspace/api/use-get-workspaces";
 import { Info, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import {
@@ -31,9 +31,22 @@ const Toolbar = () => {
     router.push(`/workspace/${workspaceId}/channel/${id}`);
   };
 
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if ((e.key === "i" || e.key === "I") && e.ctrlKey) {
+        setOpen((p) => !p);
+      }
+    };
+
+    document.addEventListener("keydown", down);
+    return () => {
+      document.removeEventListener("keydown", down);
+    };
+  }, []);
+
   return (
     <>
-      <nav className="bg-[#481349] flex items-center justify-between h-10 p-1.5">
+      <nav className="bg-[#6786B7] flex items-center justify-between h-10 p-1.5">
         <div className="flex-1" />
         <div className="min-w-[280px] max-[642px] grow-[2] shrink">
           <Button
@@ -41,14 +54,11 @@ const Toolbar = () => {
             size="sm"
             className="bg-accent/25 hover:bg-accent-25 w-full justify-start h-7 px-2">
             <Search className="size-4 text-white mr-2" />
-            <span className="text-white text-xs">Search {data?.name}</span>
+            <span className="text-xs">Search {data?.name}</span>
+            <span className="text-xs font-bold ml-auto">( Ctrl + I )</span>
           </Button>
         </div>
-        <div className="ml-auto flex-1 flex items-center justify-end">
-          <Button variant={"transparent"} size={"iconSmall"}>
-            <Info className="size-5" />
-          </Button>
-        </div>
+        <div className="flex-1" />
       </nav>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Type a search..." />
@@ -73,7 +83,7 @@ const Toolbar = () => {
                 <div className="flex items-center gap-1">
                   <Avatar className="size-6 rounded-md mr-1">
                     <AvatarImage className="rounded-full" src={user.image} />
-                    <AvatarFallback className="bg-violet-500 text-xs font-bold">
+                    <AvatarFallback className="bg-[#C5E4EA] text-xs font-bold">
                       {user.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
