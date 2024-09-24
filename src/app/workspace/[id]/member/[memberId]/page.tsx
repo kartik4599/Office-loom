@@ -1,14 +1,14 @@
 "use client";
 import { useGetOrCreateConversation } from "@/features/conversation/api/use-get-or-create-conversation";
 import Conversation from "@/features/conversation/components/conversation";
-import { useGetMemberId } from "@/features/members/api/use-get-members";
+import { getMemberId } from "@/features/members/api/use-get-members";
 import { getworkspaceId } from "@/features/workspace/api/use-get-workspaces";
 import { Loader, TriangleAlert } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
 const Page = () => {
-  const memberId = useGetMemberId();
+  const memberId = getMemberId();
   const workspaceId = getworkspaceId();
   const { data, mutate, isPending } = useGetOrCreateConversation();
 

@@ -5,7 +5,7 @@ import {
 import { useCreateChannelModal } from "@/features/channel/store/use-create-channel-modal";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
 import {
-  useGetMemberId,
+  getMemberId,
   useGetMembers,
 } from "@/features/members/api/use-get-members";
 import { useGetWorkspace } from "@/features/workspace/api/use-get-workspaces";
@@ -33,7 +33,7 @@ const WorkspaceSidebar = () => {
   const { data: members } = useGetMembers(workspaceId);
   const [_, setOpen] = useCreateChannelModal();
   const channelId = useGetChannelId();
-  const memberId = useGetMemberId();
+  const memberId = getMemberId();
 
   if (workspaceLoading || memberLoading) {
     return (

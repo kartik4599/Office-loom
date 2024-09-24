@@ -9,14 +9,13 @@ export const useGetMembers = (workspaceId: Id<"workspaces">) => {
   return { data, isLoading };
 };
 
-export const useGetMember = (id?: Id<"members">) => {
-  const args = { memberId: id || useGetMemberId() };
-  const data = useQuery(api.members.getById, args);
+export const useGetMember = (memberId: Id<"members">) => {
+  const data = useQuery(api.members.getById, { memberId });
   const isLoading = data === undefined;
   return { data, isLoading };
 };
 
-export const useGetMemberId = () => {
+export const getMemberId = () => {
   const params = useParams();
   const memberId = params.memberId as Id<"members">;
 
