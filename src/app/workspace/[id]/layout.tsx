@@ -30,7 +30,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
           <ResizablePanel
             defaultSize={20}
             minSize={15}
-            className="bg-[#8199c3]">
+            className="bg-[#2D5D62]">
             <WorkspaceSidebar />
           </ResizablePanel>
           <ResizableHandle withHandle />
