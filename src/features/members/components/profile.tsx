@@ -10,7 +10,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { GetworkspaceId } from "@/features/workspace/api/use-get-workspaces";
-import { AlertTriangle, ChevronDown, Loader, MailIcon } from "lucide-react";
+import {
+  AlertTriangle,
+  ChevronDown,
+  Loader,
+  MailIcon,
+  Pencil,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -19,6 +25,10 @@ import { useCurrentMember } from "../api/use-current-member";
 import { useDeleteMember } from "../api/use-delete-member";
 import { useGetMember } from "../api/use-get-members";
 import { useUpdateMember } from "../api/use-update-member";
+import { FaPencilAlt } from "react-icons/fa";
+import { useRef, useState } from "react";
+import { useGenerateUpload } from "@/features/storage/api/use-generate-upload";
+import { useUpdateProfileMember } from "../api/use-update-profile-member";
 
 interface ProfileProps {
   profileMemberId: Id<"members">;
@@ -26,19 +36,21 @@ interface ProfileProps {
 }
 const Profile = ({ profileMemberId, onClose }: ProfileProps) => {
   const { ConfirmDialog, confirm } = useConfirm();
-
   const { data: member, isLoading } = useGetMember(profileMemberId);
-
+  const [imageLoading, setImageLoading] = useState(false);
   const workspaceId = GetworkspaceId();
   const { data: currentMember } = useCurrentMember(workspaceId);
 
-  const { mutate: updateMember, isPending: isUpdatePending } =
-    useUpdateMember();
+  const { mutate: updateMember } = useUpdateMember();
 
-  const { mutate: deleteMember, isPending: isDeletePending } =
-    useDeleteMember();
+  const { mutate: deleteMember } = useDeleteMember();
+
+  const { mutate: updatePhoto } = useUpdateProfileMember();
 
   const router = useRouter();
+
+  const inputref = useRef<HTMLInputElement>(null);
+  const { mutate: mutateImage } = useGenerateUpload();
 
   const removeHandler = async (type: "leave" | "remove") => {
     const options =
@@ -61,7 +73,7 @@ const Profile = ({ profileMemberId, onClose }: ProfileProps) => {
         onSuccess: () => {
           onClose();
           toast.success("Member removed");
-          if(type==="leave") router.push("/");
+          if (type === "leave") router.push("/");
         },
         onError: () => {
           toast.error("Error Occured");
@@ -108,18 +120,65 @@ const Profile = ({ profileMemberId, onClose }: ProfileProps) => {
 
   const avatarFallback = member?.user?.name?.charAt(0).toUpperCase();
 
+  const fileHandler = async (files: FileList | null) => {
+    if (!files || !files[0]) return;
+    try {
+      setImageLoading(true);
+      const url = await mutateImage({}, { throwError: true });
+      if (!url) throw new Error("Failed to upload image");
+
+      const result = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": files[0].type },
+        body: files[0],
+      });
+      if (!result.ok) throw new Error("Failed to upload image");
+      const data = await result.json();
+
+      updatePhoto(
+        { image: data.storageId },
+        {
+          onSuccess: () => {
+            toast.success("Profile picture updated");
+          },
+        }
+      );
+    } catch (e) {
+      toast.error("Error occured while updating profile picture");
+    } finally {
+      setImageLoading(false);
+    }
+  };
+
   return (
     <>
       <ConfirmDialog />
+      <input
+        onChange={({ target: { files } }) => fileHandler(files)}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        ref={inputref}
+      />
       <div className="flex flex-col items-center justify-center p-4">
         <Avatar className="max-w-[256px] max-h-[256px] size-full">
-          <AvatarImage src={member.user.image} className="object-contain" />
+          <AvatarImage
+            src={imageLoading ? "" : member.user.image}
+            className="object-contain"
+          />
           <AvatarFallback className="bg-[#C5E4EA] font-bold aspect-square text-6xl">
-            {avatarFallback}
+            {imageLoading ? "Loading" : avatarFallback}
           </AvatarFallback>
+          {currentMember?._id === member._id && (
+            <div
+              onClick={() => inputref.current?.click()}
+              className="cursor-pointer absolute z-10 bg-white rounded-full bottom-10 shadow-md right-5 p-2">
+              <FaPencilAlt className="size-5 m-auto" />
+            </div>
+          )}
         </Avatar>
+        <p className="text-xl font-bold mt-2">{member.user.name}</p>
         <div className="flex flex-col p-4 w-full">
-          <p className="text-xl font-bold">{member.user.name}</p>
           {currentMember?.role === "admin" &&
             currentMember._id !== member._id && (
               <div className="flex items-center gap-2 mt-4">
