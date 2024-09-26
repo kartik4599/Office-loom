@@ -25,7 +25,7 @@ const ConversationSidebar = () => {
     <div className="flex flex-col gap-2 bg-[#50767a] h-full p-2">
       <div className="text-white font-semibold truncate">Direct messages</div>
       {data?.map(({ member, message, user }) => (
-        <Link href={`/workspace/${workspaceId}/member/${member._id}`}>
+        <Link key={member._id} href={`/workspace/${workspaceId}/member/${member._id}`}>
           <div className="gap-2 flex flex-col">
             <div className="cursor-pointer hover:bg-accent/20 rounded py-3 px-1 flex items-start" key={member._id}>
               <Avatar className="size-10 rounded-md mr-1">
