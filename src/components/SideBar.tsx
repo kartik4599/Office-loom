@@ -1,11 +1,11 @@
 import UserButton from "@/features/auth/components/user-button";
 import WorkspaceSwitcher from "@/features/workspace/components/workspace-switcher";
 import { Bell, Home, MessagesSquare, MoreHorizontal } from "lucide-react";
-import { usePathname } from "next/navigation";
 import SidebarButton from "./sidebar-button";
+import { useCurrentSection } from "@/features/conversation/store/use-currect-section";
 
 const SideBar = () => {
-  const pathname = usePathname();
+  const [currentSection, setCurrentSection] = useCurrentSection();
 
   return (
     <aside className="w-[70px] h-full bg-[#2D5D62] flex flex-col gap-y-4 items-center pt-[9px] pb-4">
@@ -13,11 +13,17 @@ const SideBar = () => {
       <SidebarButton
         icon={Home}
         label="Home"
-        isActive={pathname.includes("/workspace")}
+        isActive={currentSection === "home"}
+        onClick={setCurrentSection.bind(null, "home")}
       />
-      <SidebarButton icon={MessagesSquare} label="DMs" />
-      <SidebarButton icon={Bell} label="Activity" />
-      <SidebarButton icon={MoreHorizontal} label="More" />
+      <SidebarButton
+        icon={MessagesSquare}
+        label="DMs"
+        isActive={currentSection === "dms"}
+        onClick={setCurrentSection.bind(null, "dms")}
+      />
+      <SidebarButton icon={Bell} label="Activity" onClick={() => {}} />
+      <SidebarButton icon={MoreHorizontal} label="More" onClick={() => {}} />
       <div className="flex flex-col items-center justify-center gap-y-1 mt-auto">
         <UserButton />
       </div>

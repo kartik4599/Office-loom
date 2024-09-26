@@ -1,4 +1,5 @@
 "use client";
+import SecondSidebar from "@/components/second-side-bar";
 import SideBar from "@/components/SideBar";
 import Toolbar from "@/components/Toolbar";
 import { Button } from "@/components/ui/button";
@@ -25,13 +26,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <SideBar />
         <ResizablePanelGroup
           direction="horizontal"
-          autoSaveId={"ca-workspace-layout"}
-        >
+          autoSaveId={"ca-workspace-layout"}>
           <ResizablePanel
             defaultSize={20}
             minSize={15}
             className="bg-[#2D5D62]">
-            <WorkspaceSidebar />
+            <SecondSidebar />
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={80} minSize={20}>

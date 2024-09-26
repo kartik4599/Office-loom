@@ -9,13 +9,7 @@ import {
   useGetMembers,
 } from "@/features/members/api/use-get-members";
 import { useGetWorkspace } from "@/features/workspace/api/use-get-workspaces";
-import {
-  AlertTriangle,
-  Hash,
-  Loader,
-  MessageSquareText,
-  SendHorizonal,
-} from "lucide-react";
+import { AlertTriangle, Hash, Loader } from "lucide-react";
 import SidebarItem from "./side-bar-item";
 import UserItems from "./user-items";
 import WorkspaceHeader from "./work-space-header";
@@ -58,20 +52,6 @@ const WorkspaceSidebar = () => {
         workspace={workspace}
         isAdmin={member.role === "admin"}
       />
-      {/* <div className="flex flex-col px-2 mt-3">
-        <SidebarItem
-          label="Threads"
-          id="threads"
-          icon={MessageSquareText}
-          workspaceId={workspaceId}
-        />
-        <SidebarItem
-          label="Drafts & Sent"
-          id="drafts"
-          icon={SendHorizonal}
-          workspaceId={workspaceId}
-        />
-      </div> */}
       <WorkspaceSection
         label="Channels"
         hint="New channel"
