@@ -55,6 +55,13 @@ const schema = defineSchema({
     .index("by_workspace_id", ["workspaceId"])
     .index("by_message_id", ["messageId"])
     .index("by_member_Id", ["memberId"]),
+
+  huddle: defineTable({
+    workspaceId: v.id("workspaces"),
+    createdMemberId: v.id("members"),
+    receiverMemberId: v.id("members"),
+    status: v.union(v.literal("waiting"), v.literal("accepted")),
+  }).index("by_workspace_id", ["workspaceId"]),
 });
 
 export default schema;

@@ -33,6 +33,7 @@ const Conversation = ({ id }: { id: Id<"conversations"> }) => {
         memberImage={data?.user.image}
         memberName={data?.user.name}
         onClick={onOpenProfileMember.bind(null, data?._id)}
+        memberId={memberId}
       />
       <MessageList
         canLoadMore={status === "CanLoadMore"}

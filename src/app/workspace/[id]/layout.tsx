@@ -8,6 +8,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import CallModel from "@/features/huddle/components/call-model";
 import Profile from "@/features/members/components/profile";
 import Thread from "@/features/messages/components/thread";
 import WorkspaceSidebar from "@/features/workspace/components/work-space-sidebar";
@@ -66,6 +67,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           )}
         </ResizablePanelGroup>
       </div>
+      <CallModel />
     </div>
   );
 };
