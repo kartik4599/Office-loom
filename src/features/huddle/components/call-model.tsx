@@ -43,6 +43,12 @@ const CallModel = () => {
       router.push("/meet/" + huddle.hiddleId);
       toast.success("Joined Meet");
     }
+
+    // return () => {
+    //   if (huddle) {
+    //     cancleHuddle({ id: huddle.hiddleId });
+    //   }
+    // };
   }, [huddle, router]);
 
   return (
